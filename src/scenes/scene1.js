@@ -29,10 +29,7 @@ export default class Scene1 {
     console.log(this.debug)
     this.debugFolder=this.debug.ui
     
-    
     const geometry = new THREE.BoxGeometry();
-
-
 
 
     // const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
@@ -54,13 +51,14 @@ export default class Scene1 {
   activate() {
     this.active = true;
     console.log("Scene1 activated");
+    
     this.createSceneObjects();
     this.switchButton = document.getElementById('switch-scene-btn');
     if (this.switchButton) {
       this.onSwitchSceneClick = () => window.experience.switchScene();
       this.switchButton.addEventListener('click', this.onSwitchSceneClick);
     }
-
+    
   }
 
   deactivate() {
@@ -68,8 +66,27 @@ export default class Scene1 {
     console.log("Scene1 desactivated");
   }
 
+  htmlPoints(){
+    this.points = [
+      {
+        position: new THREE.Vector3(0, 0, -0.6),
+        element: document.querySelector('.point-0')
+      }
+    ]
+  }
+
+  hidePoints(){
+    if(this.points){
+        for(const point of this.points)
+        {
+            point.element.classList.remove('visible')
+        }
+    }
+  }
 
   createSceneObjects() {
+    this.htmlPoints();
+    this.raycaster = new THREE.Raycaster()
       this.light = new THREE.DirectionalLight('#ffffff', 5);
       this.light.position.set(0, -10, 0);
       this.light.lookAt(0,0,0)
@@ -108,8 +125,60 @@ export default class Scene1 {
     // Rotation circulaire sous l'objet
     this.light.position.x = radius * Math.cos(elapsedTime);
     this.light.position.z = radius * Math.sin(elapsedTime);
+
+    if(this.points && this.Brain){
+      for(const point of this.points)
+      {
+        const screenPosition = point.position.clone()
+        screenPosition.project(this.camera)
+
+        this.raycaster.setFromCamera(screenPosition, this.camera)
+        const intersects = this.raycaster.intersectObjects(this.scene.children, true)
+        if(intersects.length === 0)
+        {
+            point.element.classList.add('visible')
+        }
+        else
+        {
+          const intersectionDistance = intersects[0].distance
+          const pointDistance = point.position.distanceTo(this.camera.position)
+
+          if(intersectionDistance < pointDistance)
+          {
+              point.element.classList.remove('visible')
+          }
+          else
+          {
+              point.element.classList.add('visible')
+          }
+      
+        }
+  
+
+        // const translateX = screenPosition.x * this.experience.sizes.width * 0.5
+        // const translateY = -screenPosition.y * this.experience.sizes.height * 0.5
+        // point.element.style.transform = `translateX(${translateX}px) translateY(${translateY}px)`
+        const targetX = screenPosition.x * this.experience.sizes.width * 0.5;
+        const targetY = -screenPosition.y * this.experience.sizes.height * 0.5;
+
+        // Si vous n'avez pas de position précédente, initialisez-la
+        if (!point.prevTranslateX) {
+            point.prevTranslateX = targetX;
+            point.prevTranslateY = targetY;
+        }
+
+        // Interpolation pour lisser le mouvement
+        const smoothFactor = 0.05; // Ajustez ce facteur pour contrôler la fluidité
+        point.prevTranslateX += (targetX - point.prevTranslateX) * smoothFactor;
+        point.prevTranslateY += (targetY - point.prevTranslateY) * smoothFactor;
+
+        // Appliquez les positions lissées
+        point.element.style.transform = `translateX(${point.prevTranslateX}px) translateY(${point.prevTranslateY}px)`;
+          
+      }
+    }
+
     
-    // console.log("crampté");
   }
 
   destroy() {
@@ -137,8 +206,9 @@ export default class Scene1 {
         const child = this.scene.children[0];
         this.scene.remove(child);
     }
-    // this.raycaster = null;
+    this.raycaster = null;
     this.active = false;
+    this.hidePoints();
 
 
     this.scene.clear();
