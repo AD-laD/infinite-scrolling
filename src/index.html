@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <button id="switch-scene-btn">Switch Scene</button>
+
+    <div id="overlay">
+        <button id="startButton">Start</button>
+    </div>
+
+    <!-- <video id="video" crossOrigin="anonymous" loop autoplay muted playsinline style="display:none">
+        <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+        <p>Your browser does not support the video tag.</p>
+      </video> -->
+
+    <video id="video" loop crossOrigin="anonymous" playsinline muted style="display:none">
+        <source src="/video/video2.mov" type="video/mp4">
+    </video>
+    <canvas class="webgl"></canvas>
+    <script type="module" src="./script.js"></script>
+    
+    <!-- <video id="video" src="/video/test.mp4" autoplay loop type='video/mp4'></video> -->
+</body>
+</html>
