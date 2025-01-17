@@ -249,6 +249,7 @@ export default class Scene1 {
 
     }
 
+
     createSceneObjects() {
         this.scene.add(this.heartGroup);
         this.createMaterials();  

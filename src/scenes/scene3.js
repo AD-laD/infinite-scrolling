@@ -121,22 +121,85 @@ export default class Scene3 {
   });
   }
 
+  videoTexture(){
+    this.video = document.getElementById( 'video2' );
+    this.video.muted = true;
+    // this.video.load();
+    this.video.play();
+
+    console.log('État de la vidéo :', this.video.readyState);
+      this.video.addEventListener('canplay', () => {
+        console.log('La vidéo est prête à être jouée');
+    });
+      this.video.addEventListener('play', () => {
+        console.log('La vidéo scene 3 a commencé à jouer');
+    });
+    this.videodata=this.video;
+    const videotexture = new THREE.VideoTexture(this.video);
+    videotexture.minFilter = THREE.LinearFilter;
+    videotexture.magFilter = THREE.LinearFilter;
+    videotexture.format = THREE.RGBFormat;
+    videotexture.needsUpdate = true;
+
+
+    this.videoMaterial = new THREE.MeshBasicMaterial({
+        map:videotexture,
+        transparent: true, 
+        opacity: 0.2
+    });
+
+    return this.videoMaterial
+  }
+
+  createSphere(radius, widthSegments, heightSegments, position) {
+    const geometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
+    geometry.scale(-1, 1, 1)
+    if(this.videoMaterial){
+      const sphere = new THREE.Mesh(geometry, this.videoTexture());
+      sphere.position.set(position.x, position.y, position.z);
+      this.scene.add(sphere);
+      return sphere;
+    }
+  }
+
+  setLight(){
+    this.sunLight = new THREE.DirectionalLight('#ffffff', 10)
+    this.sunLight.castShadow = true
+    this.sunLight.shadow.camera.far = 15
+    this.sunLight.shadow.mapSize.set(1024, 1024)
+    this.sunLight.shadow.normalBias = 0.05
+    this.sunLight.position.set(3.5, 2, 3.5)
+    this.scene.add(this.sunLight)
+
+    const light = new THREE.DirectionalLight('#ffffff', 1.5);
+    light.position.set(1, 1, 1).normalize();
+    light.lookAt(0,0,0)
+    light.intensity= 5;
+    this.scene.add(light);
+  }
+  
+
   createSceneObjects() {
     this.htmlPoints();
+    // this.setLight();
     this.raycaster = new THREE.Raycaster()
       this.light = new THREE.DirectionalLight('#ffffff', 5);
       this.light.position.set(0, -10, 0);
       this.light.lookAt(0,0,0)
       this.light.intensity= 100;
       this.scene.add(this.light);
+      this.videoTexture();
     // this.testMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
             // testMaterial.hue = 0.2;
             // testMaterial.saturation = 0.3;
 
-    // this.resources.on('ready', () =>
+    // (this.resources.on('ready', () =>
     // {
       this.Brain = new ObjectModel3D('brain', { x: 1, y: 1, z: 1 }, this.scene)
-    // })     
+    // })
+    // this.createSphere(0.5, 32, 16,{ x: -2, y: 0, z: 0 }); 
+    // this.createSphere(0.7, 32, 16, { x: -5, y: 0, z: 10 });  
+    this.createSphere(10, 32, 16, { x: 0, y: 0, z: 0 });
   }
   
 
@@ -235,6 +298,14 @@ export default class Scene3 {
         const child = this.scene.children[0];
         this.scene.remove(child);
     }
+
+    if (this.videodata) {
+      this.video = null;
+      this.videodata.pause();
+      this.videodata.src = "";
+      this.videodata.load();
+      this.videodata = null;
+    }
     this.raycaster = null;
     this.active = false;
     this.hidePoints();
@@ -243,6 +314,5 @@ export default class Scene3 {
     this.scene.clear();
     console.log("Scene3 destroyed");
 
-    // console.log(this.scene);
   }
 }
