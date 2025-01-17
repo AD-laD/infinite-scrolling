@@ -4,7 +4,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import shadingVertexShader from '../shaders/shading/vertex.glsl'
 import shadingFragmentShader from '../shaders/shading/fragment.glsl'
 import Experience from '../Experience/Experience.js'
-import ObjectModel3D from '../Experience/World/ObjectModel3D.js';
+import ObjectModel3D from '../Experience/World/ObjectModel3D.js'
+import Sound from '../Experience/World/Sound.js'
 
 export default class Scene1 {
   constructor() {
@@ -53,6 +54,7 @@ export default class Scene1 {
     console.log("Scene1 activated");
     
     this.createSceneObjects();
+    this.loadSounds();
     this.switchButton = document.getElementById('switch-scene-btn');
     if (this.switchButton) {
       this.onSwitchSceneClick = () => window.experience.switchScene();
@@ -71,6 +73,26 @@ export default class Scene1 {
       {
         position: new THREE.Vector3(0, 0, -0.6),
         element: document.querySelector('.point-0')
+      },
+      {
+        position: new THREE.Vector3(0, 0.35, -0.4),
+        element: document.querySelector('.point-1')
+      },
+      {
+        position: new THREE.Vector3(0, 0.2, 0.6),
+        element: document.querySelector('.point-2')
+      },
+      {
+        position: new THREE.Vector3(0.3, -0.2, 0.2),
+        element: document.querySelector('.point-3')
+      },
+      {
+        position: new THREE.Vector3(-0.3, -0.2, 0.2),
+        element: document.querySelector('.point-4')
+      },
+      {
+        position: new THREE.Vector3(0, -0.35,-0.2),
+        element: document.querySelector('.point-5')
       }
     ]
   }
@@ -82,6 +104,21 @@ export default class Scene1 {
             point.element.classList.remove('visible')
         }
     }
+  }
+
+  loadSounds(){
+    const hoverSound = new Sound({
+      src: 'sound/hover.wav',
+      volume: 0.8
+    });
+    // document.querySelector('.point').addEventListener('mouseenter', () => {
+    //   hoverSound.play();
+    // });
+    this.points.forEach((point) => {
+      point.element.addEventListener('mouseenter', () => {
+          hoverSound.play();
+      });
+  });
   }
 
   createSceneObjects() {

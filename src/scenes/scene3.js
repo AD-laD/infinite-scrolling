@@ -166,12 +166,12 @@ export default class Scene3 {
     }
 
     load3DText(){
-        const fontLoader = new FontLoader()
-        fontLoader.load(
+        this.fontLoader = new FontLoader()
+        this.fontLoader.load(
             '/fonts/helvetiker_regular.typeface.json',
             (font) =>
             {
-                const textGeometry = new TextGeometry(
+                this.textGeometry = new TextGeometry(
                     'I n f i n i t e  S c r o l l i n g',
                     {
                         font: font,
@@ -189,12 +189,12 @@ export default class Scene3 {
                 // const textMaterial = new THREE.MeshBasicMaterial()
                 const textMaterial = new THREE.MeshBasicMaterial({ wireframe: true })
                 // const textMaterial = new THREE.MeshMatcapMaterial({ matcap: matcapTexture })
-                const text = new THREE.Mesh(textGeometry, textMaterial)
-                textGeometry.computeBoundingBox()
-                textGeometry.translate(
-                    - (textGeometry.boundingBox.max.x-0.02) * 0.5,
-                    - (textGeometry.boundingBox.max.y-0.02) + 1.5,
-                    - (textGeometry.boundingBox.max.z-0.02) * 0.5
+                const text = new THREE.Mesh(this.textGeometry, textMaterial)
+                this.textGeometry.computeBoundingBox()
+                this.textGeometry.translate(
+                    - (this.textGeometry.boundingBox.max.x-0.02) * 0.5,
+                    - (this.textGeometry.boundingBox.max.y-0.02) + 1.5,
+                    - (this.textGeometry.boundingBox.max.z-0.02) * 0.5
                 )
                 // textGeometry.center()
                 this.scene.add(text)
@@ -332,6 +332,7 @@ export default class Scene3 {
 
     activate() {
         this.active = true;
+        this.time = this.experience.time
         // console.log("Scene3 activated");
         // Création des objets de la scène
 
@@ -390,9 +391,8 @@ export default class Scene3 {
                     console.log("Point position (world):", point.position);
                     console.log("Point position (projected):", screenPosition);
                     screenPosition.project(this.camera)
-                    if(elapsedTime >30000){
+                    if(elapsedTime >3){
                         point.element.classList.add('visible')
-
                     }
                     // const translateX = screenPosition.x * this.experience.sizes.width * 0.5
                     // const translateY = -screenPosition.y * this.experience.sizes.height * 0.5
@@ -405,7 +405,7 @@ export default class Scene3 {
                     const translateY = Math.round(-screenPosition.y * this.experience.sizes.height * 0.5);
 
                     // console.log(this.experience.sizes.height);
-                    point.element.style.transform = `translateX(${translateX}px) translateY(${translateY}px)`
+                    // point.element.style.transform = `translateX(${translateX}px) translateY(${translateY}px)`
 
                     console.log({
                         screenX: screenPosition.x,
@@ -414,22 +414,22 @@ export default class Scene3 {
                         translateY,
                         sizes: this.experience.sizes,
                     });
-                    // const targetX = -screenPosition.x * this.experience.sizes.width * 0.5;
-                    // const targetY = screenPosition.y * this.experience.sizes.height * 0.5;
+                    const targetX = -screenPosition.x * this.experience.sizes.width * 0.5;
+                    const targetY = screenPosition.y * this.experience.sizes.height * 0.5;
 
-                    // // Si vous n'avez pas de position précédente, initialisez-la
-                    // if (!point.prevTranslateX) {
-                    //     point.prevTranslateX = targetX;
-                    //     point.prevTranslateY = targetY;
-                    // }
+                    // Si vous n'avez pas de position précédente, initialisez-la
+                    if (!point.prevTranslateX) {
+                        point.prevTranslateX = targetX;
+                        point.prevTranslateY = targetY;
+                    }
 
-                    // // Interpolation pour lisser le mouvement
-                    // const smoothFactor = 0.05; // Ajustez ce facteur pour contrôler la fluidité
-                    // point.prevTranslateX += (targetX - point.prevTranslateX) * smoothFactor;
-                    // point.prevTranslateY += (targetY - point.prevTranslateY) * smoothFactor;
+                    // Interpolation pour lisser le mouvement
+                    const smoothFactor = 0.05; // Ajustez ce facteur pour contrôler la fluidité
+                    point.prevTranslateX += (targetX - point.prevTranslateX) * smoothFactor;
+                    point.prevTranslateY += (targetY - point.prevTranslateY) * smoothFactor;
 
                     // // Appliquez les positions lissées
-                    // point.element.style.transform = `translateX(${point.prevTranslateX}px) translateY(${point.prevTranslateY}px)`;
+                    point.element.style.transform = `translateX(${point.prevTranslateX}px) translateY(${point.prevTranslateY}px)`;
                     // point.element.style.transform = `translateX(${point.targetX}px) translateY(${point.targetY}px)`;
 
                     
@@ -505,8 +505,12 @@ export default class Scene3 {
         this.TikTokLogo = null;
         this.Heart = null;
         this.hidePoints();
-        // Désactiver la scène
+
         this.active = false;
+        this.fontLoader = null;
+        this.textGeometry = null;
+        this.camera=null;
+
         this.scene.clear();
 
         console.log("Scene3 destroyed");

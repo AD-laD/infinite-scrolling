@@ -8,7 +8,58 @@ html,
 body
 {
     overflow: hidden;
+    font-family: "Merriweather", serif;
+    font-weight: 900;
 }
+
+.merriweather-light {
+  font-family: "Merriweather", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.merriweather-regular {
+  font-family: "Merriweather", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.merriweather-bold {
+  font-family: "Merriweather", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.merriweather-black {
+  font-family: "Merriweather", serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.merriweather-light-italic {
+  font-family: "Merriweather", serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.merriweather-regular-italic {
+  font-family: "Merriweather", serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.merriweather-bold-italic {
+  font-family: "Merriweather", serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.merriweather-black-italic {
+  font-family: "Merriweather", serif;
+  font-weight: 900;
+  font-style: italic;
+}
+
 
 .webgl
 {
@@ -80,10 +131,11 @@ body
     background: #00000077;
     border: 1px solid #ffffff77;
     color: #ffffff;
-    font-family: Helvetica, Arial, sans-serif;
+    /* font-family: Helvetica, Arial, sans-serif; */
+    /* font-family: 'merriweather-bold'; */
     text-align: center;
     line-height: 40px;
-    font-weight: 100;
+    /* font-weight: 100; */
     font-size: 14px;
     cursor: help;
     transform: scale(0, 0);
@@ -102,7 +154,7 @@ body
     border: 1px solid #ffffff77;
     color: #ffffff;
     line-height: 1.3em;
-    font-family: Helvetica, Arial, sans-serif;
+    /* font-family: Helvetica, Arial, sans-serif; */
     font-weight: 100;
     font-size: 14px;
     opacity: 0;

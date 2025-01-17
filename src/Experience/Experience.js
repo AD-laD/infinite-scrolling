@@ -47,8 +47,8 @@ export default class Experience
         // Scenes setup
         this.currentSceneIndex = 0;
         this.scenes = [
-            // new Scene1(),
-            // new Scene2(), 
+            new Scene1(),
+            new Scene2(), 
             new Scene3()
         ];  
         this.scene = this.scenes[this.currentSceneIndex];
