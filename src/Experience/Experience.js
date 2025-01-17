@@ -10,9 +10,10 @@ import Resources from './Utils/Resources.js'
 
 import sources from './sources.js'
 
-import Scene1 from '../scenes/scene1';
-import Scene2 from '../scenes/scene2';
+import Scene1 from '../scenes/scene1.js';
 import Scene3 from '../scenes/scene3.js';
+import Scene4 from '../scenes/scene4.js';
+
 
 let instance = null
 
@@ -48,8 +49,8 @@ export default class Experience
         this.currentSceneIndex = 0;
         this.scenes = [
             new Scene1(),
-            new Scene2(), 
-            new Scene3()
+            new Scene3(), 
+            new Scene4()
         ];  
         this.scene = this.scenes[this.currentSceneIndex];
         this.scene.activate();
@@ -86,10 +87,12 @@ export default class Experience
 
     switchScene() {
         // this.scene.deactivate();
+        // this.prevScene = this.scene;
         this.scene.destroy();
         this.currentSceneIndex = (this.currentSceneIndex + 1)% this.scenes.length;
         this.scene = this.scenes[this.currentSceneIndex];
         this.scene.activate();
+        // this.prevScene.destroy();
         console.log(this.currentSceneIndex);
         this.resize()
     }

@@ -5,7 +5,7 @@ import shadingVertexShader from '../shaders/shading/vertex.glsl'
 import shadingFragmentShader from '../shaders/shading/fragment.glsl'
 
 
-export default class Scene2 {
+export default class Scene4 {
   constructor() {
     this.scene = new THREE.Scene();
 
@@ -291,7 +291,7 @@ export default class Scene2 {
               }
           });
       }
-  });
+    });
   }
 
 
@@ -385,8 +385,9 @@ export default class Scene2 {
     }
     this.raycaster = null;
     this.active = false;
+    this.camera=null;
     
     this.scene.clear();
-    console.log("Scene2 destroyed");
+    console.log("Scene4 destroyed");
   }
 }

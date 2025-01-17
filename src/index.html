@@ -11,64 +11,98 @@
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <button id="switch-scene-btn">Switch Scene</button>
-
-    <div id="overlay">
-        <button id="startButton">Start</button>
+    <div id="preloader">
+        <div class="spinner"></div>
     </div>
+      
+    <div id="mainContent">
+        <button id="switch-scene-btn">Switch Scene</button>
 
-    <!-- <video id="video" crossOrigin="anonymous" loop autoplay muted playsinline style="display:none">
-        <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
-        <p>Your browser does not support the video tag.</p>
-      </video> -->
+        <div id="overlay">
+            <button id="startButton">Start</button>
+        </div>
 
-    <video id="video" loop crossOrigin="anonymous" playsinline muted style="display:none">
-        <source src="/video/video2.mov" type="video/mp4">
-    </video>
-    <canvas class="webgl"></canvas>
-    <div class="loading-bar"></div>
+        <div id="popup">
+            <div class="popup-content">
+                <div class="welcome">Welcome to Infinite-Scrolling, a Three.js Interactive Experience about our use of TikTok. </div>
+                <div class="instruction"> Click on the screen to start.</div>
+            <!-- <button id="playVideo">Play Video</button> -->
+            </div>
 
-    <div class="point point-0">
-        <div class="label">1</div>
-        <div class="text">Occipital Lobe</div>
+            <div class="popup-footer">
+                <span class="popup-credit">made by ad-lad</span>
+                <span class="popup-year">2025</span>
+            </div>
+            
+        </div>
+
+
+        <video id="video" loop crossOrigin="anonymous" playsinline muted style="display:none">
+            <source src="/video/video2.mov" type="video/mp4">
+        </video>
+        <canvas class="webgl"></canvas>
+        <div class="loading-bar"></div>
+
+        <div class="point point-0">
+            <div class="label">1</div>
+            <div class="text">Occipital Lobe</div>
+        </div>
+
+        <div class="point point-1">
+            <div class="label">2</div>
+            <div class="text">Parietal Lobe</div>
+        </div>
+
+        <div class="point point-2">
+            <div class="label">3</div>
+            <div class="text">Frontal Lobe</div>
+        </div>
+
+
+        <div class="point point-3">
+            <div class="label">4</div>
+            <div class="text">Temporal Lobe</div>
+        </div>
+
+        <div class="point point-4">
+            <div class="label">4</div>
+            <div class="text">Temporal Lobe</div>
+        </div>
+
+        <div class="point point-5">
+            <div class="label">5</div>
+            <div class="text">Cerebellum</div>
+        </div>
+
+
+        <div class="point s1-headphones">
+            <!-- <div class="label">1</div> -->
+            <div class="s1-txt">This experience contains music, sound and videos. The use of headphones is highly recommended.</div>
+            <img class="s1-icon" src ="img/headphone-icon.png">
+        </div>
+
+        
+        <script type="module" src="./script.js"></script>
     </div>
-
-    <div class="point point-1">
-        <div class="label">2</div>
-        <div class="text">Parietal Lobe</div>
-    </div>
-
-    <div class="point point-2">
-        <div class="label">3</div>
-        <div class="text">Frontal Lobe</div>
-    </div>
-
-
-    <div class="point point-3">
-        <div class="label">4</div>
-        <div class="text">Temporal Lobe</div>
-    </div>
-
-    <div class="point point-4">
-        <div class="label">4</div>
-        <div class="text">Temporal Lobe</div>
-    </div>
-
-    <div class="point point-5">
-        <div class="label">5</div>
-        <div class="text">Cerebellum</div>
-    </div>
-
-
-    <div class="point s1-headphones">
-        <!-- <div class="label">1</div> -->
-        <div class="s1-txt">This experience contains music, sound and videos. The use of headphones is highly recommended.</div>
-        <img class="s1-icon" src ="img/headphone-icon.png">
-    </div>
-
-    
-    <script type="module" src="./script.js"></script>
     
     <!-- <video id="video" src="/video/test.mp4" autoplay loop type='video/mp4'></video> -->
 </body>
+
+<script>
+    window.addEventListener("load", () => {
+    // Cacher le préchargeur
+        const preloader = document.getElementById("preloader");
+        preloader.style.display = "none";
+
+        // Afficher le contenu principal avec un effet de fondu
+        const mainContent = document.getElementById("mainContent");
+        mainContent.style.display = "block";
+        mainContent.style.opacity = 1;
+    });
+
+    const popup = document.getElementById('popup');  
+    document.addEventListener('click', () => {
+      popup.style.display = 'none'; 
+    });
+  </script>
 </html>
