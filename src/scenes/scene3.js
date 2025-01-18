@@ -18,9 +18,7 @@ export default class Scene3 {
       0.1,
       1000
     );
-    this.camera.position.set(0, 1, 3);
-    this.controls = new OrbitControls(this.camera, document.querySelector('canvas'));
-    this.controls.enableDamping = true; // Active le lissage des contrôles
+    
     
     this.experience = new Experience()
     this.resources = this.experience.resources
@@ -52,6 +50,11 @@ export default class Scene3 {
   activate() {
     this.active = true;
     console.log("Scene3 activated");
+    this.sceneStartTime = window.performance.now();
+    this.camera.position.set(-2, 0, 1);
+    this.camera.lookAt(0,0,0)
+    this.controls = new OrbitControls(this.camera, document.querySelector('canvas'));
+    this.controls.enableDamping = true; // Active le lissage des contrôles
     
     this.createSceneObjects();
     this.loadSounds();
@@ -61,11 +64,6 @@ export default class Scene3 {
       this.switchButton.addEventListener('click', this.onSwitchSceneClick);
     }
   
-  }
-
-  deactivate() {
-    this.active = false;
-    console.log("Scene3 desactivated");
   }
 
   htmlPoints(){
@@ -111,14 +109,11 @@ export default class Scene3 {
       src: 'sound/hover.wav',
       volume: 0.8
     });
-    // document.querySelector('.point').addEventListener('mouseenter', () => {
-    //   hoverSound.play();
-    // });
     this.points.forEach((point) => {
       point.element.addEventListener('mouseenter', () => {
           hoverSound.play();
       });
-  });
+    });
   }
 
   videoTexture(){
@@ -211,7 +206,7 @@ export default class Scene3 {
 
   update() {
     if (!this.active) return;
-    const elapsedTime = window.performance.now() / 1000;
+    const elapsedTime = (window.performance.now() - this.sceneStartTime) / 1000;
     const radius = 10;  // Rayon du cercle
 
     // Rotation circulaire sous l'objet
@@ -274,44 +269,63 @@ export default class Scene3 {
   }
 
   destroy() {
-    //a faire : melanger destroy et desactive
-    // window.removeEventListener('click', window);
+
     if (this.switchButton && this.onSwitchSceneClick) {
       this.switchButton.removeEventListener('click', this.onSwitchSceneClick);
+      this.onSwitchSceneClick = null;
     }
-        this.scene.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-            child.geometry.dispose();
-
-            for (const key in child.material) {
-                const value = child.material[key];
-                if (value && typeof value.dispose === 'function') {
-                    value.dispose();
-                }
-            }
+  
+    this.scene.traverse((child) => {
+      if (child instanceof THREE.Mesh || child instanceof THREE.Points || child instanceof THREE.Line) {
+        if (child.geometry) {
+          child.geometry.dispose();
         }
+        if (Array.isArray(child.material)) {
+         
+          child.material.forEach((mat) => mat?.dispose?.());
+        } else if (child.material) {
+          child.material.dispose?.();
+        }
+      }
     });
-    if (this.controls) {
-        this.controls.dispose();
-    }
+  
     while (this.scene.children.length > 0) {
-        const child = this.scene.children[0];
-        this.scene.remove(child);
+      this.scene.remove(this.scene.children[0]);
     }
-
+  
+    if (this.controls) {
+      this.controls.dispose();
+      this.controls = null;
+    }
+  
     if (this.videodata) {
-      this.video = null;
       this.videodata.pause();
       this.videodata.src = "";
       this.videodata.load();
       this.videodata = null;
+      this.video = null;
     }
-    this.raycaster = null;
-    this.active = false;
-    this.hidePoints();
+  
+    if (this.raycaster) {
+      this.scene.remove(this.raycaster);
+      this.raycaster = null;
+    }
+  
+    if (this.light) {
+      this.scene.remove(this.light);
+      this.light.dispose();
+      this.light = null;
+    }
+  
+    this.camera = null;
 
-    this.camera=null;
+    this.active = false;
+    this.hidePoints?.();
+    console.log(this.scene);
+      
     this.scene.clear();
+    this.scene = null;  
+  
     console.log("Scene3 destroyed");
 
   }

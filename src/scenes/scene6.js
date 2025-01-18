@@ -6,75 +6,30 @@ import ObjectModel3D from '../Experience/World/ObjectModel3D.js';
 import Experience from '../Experience/Experience.js'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
+import Sound from '../Experience/World/Sound.js'
 
 
-
-
-
-export default class Scene1 {
+export default class Scene6 {
     constructor() {
         this.scene = new THREE.Scene();
-        
-
-
         this.experience = new Experience()
         this.resources = this.experience.resources
-
         this.camera = new THREE.PerspectiveCamera(
             25,
             this.experience.sizes.width / this.experience.sizes.height,
             0.1,
             100
             );
-        this.camera.position.set(0,0,10);
-        this.camera.lookAt(0,0,0);
-
-
         this.debug = this.experience.debug
         console.log(this.debug)
         this.debugFolder=this.debug.ui
-
-
-        this.lastChangeTime = 0;
-        this.changeInterval = 0.05;
-        this.heartGroup = new THREE.Group();
         this.active = false; 
-        
-        // Contrôles d'orbite
-        this.controls = new OrbitControls(this.camera, document.querySelector('canvas'));
-        this.controls.enableDamping = true;
-
-        
         this.raycaster = new THREE.Raycaster();
         this.mouse = new THREE.Vector2();
-
-        this.ptx=0;
-        this.pty=0;
-        this.ptz=0;
-
-        // this.setLight();
-        // this.load3DText();
-        // this.createSceneObjects();
-
-
     }
 
    
-    deactivate() {
-        this.active = false;
-        console.log("Scene3 deactivated");
-    }
-
-
     setLight(){
-        this.sunLight = new THREE.DirectionalLight('#ffffff', 10)
-        this.sunLight.castShadow = true
-        this.sunLight.shadow.camera.far = 15
-        this.sunLight.shadow.mapSize.set(1024, 1024)
-        this.sunLight.shadow.normalBias = 0.05
-        this.sunLight.position.set(3.5, 2, 3.5)
-        this.scene.add(this.sunLight)
-
         this.light = new THREE.DirectionalLight('#ffffff', 1.5);
         this.light.position.set(1, 1, 1).normalize();
         this.light.lookAt(0,0,0)
@@ -83,7 +38,6 @@ export default class Scene1 {
     }
 
     setupDebug() {
-        // Exemple d'ajout de contrôles pour la caméra
         if (this.debug.active) {
             console.log('debug');
             this.debugFolder
@@ -143,18 +97,36 @@ export default class Scene1 {
     htmlPoints(){
         this.points = [
             {
-                // position: new THREE.Vector3(this.ptx, -10, this.ptz),
-                position: new THREE.Vector3(0,1.5,0),
-                element: document.querySelector('.s1-headphones')
+            position: new THREE.Vector3(0.52, 0.4, 0),
+            element: document.querySelector('.point-s6-1')
+            },
+            {
+            position: new THREE.Vector3(0.27, -0.12, 0),
+            element: document.querySelector('.point-s6-2')
+            },
+            {
+            position: new THREE.Vector3(0, -0.62, 0),
+            element: document.querySelector('.point-s6-3')
+            },
+            {
+            position: new THREE.Vector3(-0.25, -1.2, 0),
+            element: document.querySelector('.point-s6-4')
+            },
+            {
+            position: new THREE.Vector3(-0.5, -1.7, 0),
+            element: document.querySelector('.point-s6-5')
+            },
+            {
+            position: new THREE.Vector3(-0.78, -2, 0),
+            element: document.querySelector('.point-s6-6')
+            },
+            {
+            position: new THREE.Vector3(-1, -2.2, 0),
+            element: document.querySelector('.point-s6-7')
             }
         ]
     }
 
-    updateHtmlPoints() {
-        if (this.points) {
-            this.points[0].position.set(this.ptx, -10, this.ptz);
-        }
-    }
 
     hidePoints(){
         if(this.points){
@@ -165,17 +137,50 @@ export default class Scene1 {
         }
     }
 
-    load3DText(){
+    loadSounds(){
+        const hoverSound = new Sound({
+            src: 'sound/hover.wav',
+            volume: 0.8
+        });
+        this.points.forEach((point) => {
+            point.element.addEventListener('mouseenter', () => {
+                hoverSound.play();
+            });
+        });
+    }
+
+    createBars(){
+        this.data = [
+            { year: 2018, users: 347 },
+            { year: 2019, users: 653 },
+            { year: 2020, users: 1036 },
+            { year: 2021, users: 1407 },
+            { year: 2022, users: 1720 },
+            { year: 2023, users: 1922 },
+            { year: 2024, users: 2050 }
+        ];
+        this.data.forEach((entry, index) => {
+            const height = entry.users / 700; 
+            const geometry = new THREE.BoxGeometry(0.1, height, 0.5);
+            const cube = new THREE.Mesh(geometry, this.material);
+   
+            cube.position.set(-0.5+index/4, (height / 2)-1, 0);
+      
+            this.scene.add(cube);
+        });
+    }
+
+    load3DText(content, size, position, rotateZ){
         this.fontLoader = new FontLoader()
         this.fontLoader.load(
             '/fonts/helvetiker_regular.typeface.json',
             (font) =>
             {
                 this.textGeometry = new TextGeometry(
-                    'I n f i n i t e  S c r o l l i n g',
+                    content,
                     {
                         font: font,
-                        size: 0.2,
+                        size: size,
                         depth: 0.01,
                         curveSegments: 12,
                         bevelEnabled: true,
@@ -186,57 +191,22 @@ export default class Scene1 {
                     }
                 )
             
-                // const textMaterial = new THREE.MeshBasicMaterial()
-                const textMaterial = new THREE.MeshBasicMaterial({ wireframe: true })
-                // const textMaterial = new THREE.MeshMatcapMaterial({ matcap: matcapTexture })
-                this.text = new THREE.Mesh(this.textGeometry, textMaterial)
+               
+                this.text = new THREE.Mesh(this.textGeometry, this.textMaterial)
                 this.textGeometry.computeBoundingBox()
                 this.textGeometry.translate(
                     - (this.textGeometry.boundingBox.max.x-0.02) * 0.5,
                     - (this.textGeometry.boundingBox.max.y-0.02) + 1.5,
                     - (this.textGeometry.boundingBox.max.z-0.02) * 0.5
                 )
-                // textGeometry.center()
+                this.textGeometry.center()
                 this.scene.add(this.text)
+                this.text.position.set(position.x,position.y,position.z)
+                if (rotateZ) this.text.rotateZ(-Math.PI/2);
+                
             });
     }
 
-    videoTexture(){
-        this.video = document.getElementById( 'video' );
-        this.video.muted = false;
-        this.video.volume = 0.1;
-        this.video.load();
-        this.onSceneClick = () => {
-            this.video.loop = true;
-            this.video.play();
-        };
-        document.addEventListener('click', this.onSceneClick);
-        // document.addEventListener('click', () => {
-        //     this.video.loop = true;
-        //     this.video.play();
-        // });
-        this.video.addEventListener('play', () => {
-            console.log('La vidéo a commencé à jouer');
-        });
-        this.videodata=this.video;
-        // if(video){
-        //     console.log("oui")
-        // }
-
-        const videotexture = new THREE.VideoTexture(this.video);
-        videotexture.minFilter = THREE.LinearFilter;
-        videotexture.magFilter = THREE.LinearFilter;
-        videotexture.format = THREE.RGBFormat;
-
-        this.testMaterial = new THREE.MeshLambertMaterial({
-            color: 0xffffff,
-            alphaMap: this.alphamap,       
-            transparent: true,  
-            map:videotexture,  
-        });
-
-        return this.testMaterial
-    }
 
     createMaterials(){
         const materialParameters = { color: '#00000' }
@@ -247,82 +217,40 @@ export default class Scene1 {
                 uColor: new THREE.Uniform(new THREE.Color(materialParameters.color)),
             },
         });
+        this.textMaterial = new THREE.MeshBasicMaterial()
 
     }
 
-
     createSceneObjects() {
-        this.scene.add(this.heartGroup);
-        this.createMaterials();  
-        this.setupDebug();
+        this.createMaterials()
+        this.setupDebug()
+        this.createBars()
+        this.htmlPoints()
 
-        const iphoneScale = { x: 2, y: 2, z: 2 };
+        this.load3DText('Growth of TikTok users', 0.15, new THREE.Vector3(0.2, -1.7, 0));
+        this.load3DText('2018', 0.1, new THREE.Vector3(-0.5, -1.3, 0),1);
+        this.load3DText('2019', 0.1, new THREE.Vector3(-0.25, -1.3, 0),1);
+        this.load3DText('2020', 0.1, new THREE.Vector3(0, -1.3, 0),1);
+        this.load3DText('2021', 0.1, new THREE.Vector3(0.25, -1.3, 0),1);
+        this.load3DText('2022', 0.1, new THREE.Vector3(0.5, -1.3, 0),1);
+        this.load3DText('2023', 0.1, new THREE.Vector3(0.75, -1.3, 0),1);
+        this.load3DText('2024', 0.1, new THREE.Vector3(1, -1.3, 0),1);
+
 
         this.resources.on('ready', () =>
         {
-            console.log("ressources chargées");
-            this.Iphone = new ObjectModel3D('iphone', iphoneScale, this.scene)
-            this.Iphone.model.traverse((child) => {
-                if (child instanceof THREE.Mesh) {
-                    child.material = this.material;
-                    // child.castShadow = true;
-                }
-            });
-            this.Iphone.model.scale.z=-1
+
             // console.log(this.Iphone.position);
 
-            if(this.Iphone){
-                this.htmlPoints();
-            }
-
-            this.TikTokLogo = new ObjectModel3D('tiktoklogo', { x: 0.5, y: 0.5, z: 0.5 }, this.scene)
-            this.TikTokLogo.model.traverse((child) => {
-                if (child instanceof THREE.Mesh) {
-                    child.material = this.material;
-                    // child.castShadow = true;
-                }
-            });
-            this.Heart = new ObjectModel3D('heart', { x: 0, y: 0, z: 0 }, this.scene)
-            this.Heart.model.traverse((child) => {
-                if (child instanceof THREE.Mesh) {
-                    child.material = this.material;
-                    child.castShadow = true;
-                }
-            });
-            this.heartPosition();
+            
+               
+            
   
         })
     
-        this.alphamap = new THREE.TextureLoader().load('models/Iphone/iphonetexture.png');
-        const geometry = new THREE.PlaneGeometry(0.93, 1.95); 
-
-        this.PhoneScreen = new THREE.Mesh(geometry, this.videoTexture());
-        
-        this.scene.add(this.PhoneScreen)
-
-        this.scene.fog = new THREE.Fog( 0x000000, 1, 1000 );
-
     }
 
 
-
-    heartPosition(){
-        if(this.Heart){
-            for(let i = 0; i < 50; i++)
-                {
-                    const position = new THREE.Vector3(
-                        (Math.random() - 0.5) * 10,
-                        (Math.random() - 0.5) * 10,
-                        (Math.random() - 0.5) * 10
-                    );
-                    
-                    const scale = Math.random()*0.005;
-        
-                    // Ajouter le cœur cloné à la scène
-                    this.heartGroup = this.Heart.addToScene(this.scene, this.material, position, scale, this.heartGroup);
-                }
-        }
-    }
 
 
     resize() {
@@ -338,13 +266,15 @@ export default class Scene1 {
     }
 
     activate() {
-        this.active = true;
+        this.active = true
         this.time = this.experience.time
-        // console.log("Scene3 activated");
-        // Création des objets de la scène
+        this.sceneStartTime = window.performance.now();
 
+        this.camera.position.set(0,2,14);
+        this.camera.lookAt(0,2,0);
+        this.controls = new OrbitControls(this.camera, document.querySelector('canvas'));
+        this.controls.enableDamping = true;
 
-        // Écouteurs d'événements
         this.setupEventListeners();
         this.switchButton = document.getElementById('switch-scene-btn');
         if (this.switchButton) {
@@ -355,8 +285,9 @@ export default class Scene1 {
 
         this.setLight();
         // this.setupDebug();
-        this.load3DText();
+        
         this.createSceneObjects();
+        this.loadSounds();
 
     }
 
@@ -379,7 +310,7 @@ export default class Scene1 {
     update() {
         // Animation de la scène
         if (!this.active) return;
-        const elapsedTime = window.performance.now() / 1000;
+        const elapsedTime = (window.performance.now() - this.sceneStartTime) / 1000;
 
         if (elapsedTime - this.lastChangeTime > this.changeInterval) {
             this.sunLight.intensity = Math.random() +0.3;
@@ -387,10 +318,7 @@ export default class Scene1 {
             this.lastChangeTime = elapsedTime;
         }
 
-        // Rotation des objets
-        const offset = new THREE.Vector3(0, 0, 0.055); 
-        if (this.Iphone) {
-            this.PhoneScreen.position.copy(this.Iphone.model.position.clone().add(offset.applyQuaternion(this.Iphone.model.quaternion)));
+
             if(this.points){
                 for(const point of this.points)
                 {
@@ -398,29 +326,15 @@ export default class Scene1 {
                     // console.log("Point position (world):", point.position);
                     // console.log("Point position (projected):", screenPosition);
                     screenPosition.project(this.camera)
-                    if(elapsedTime >3){
+                    if(elapsedTime >1){
                         point.element.classList.add('visible')
                     }
-                    // const translateX = screenPosition.x * this.experience.sizes.width * 0.5
-                    // const translateY = -screenPosition.y * this.experience.sizes.height * 0.5
 
-                    // const epsilon = 0.001; // Seuil minimal pour éviter le bruit numérique
-                    // const translateX = Math.abs(screenPosition.x) < epsilon ? 0 : Math.round(screenPosition.x * this.experience.sizes.width * 0.5);
-                    // const translateY = Math.round(-screenPosition.y * this.experience.sizes.height * 0.5);
 
                     const translateX = Math.round(screenPosition.x * this.experience.sizes.width * 0.5);
                     const translateY = Math.round(-screenPosition.y * this.experience.sizes.height * 0.5);
 
-                    // console.log(this.experience.sizes.height);
-                    // point.element.style.transform = `translateX(${translateX}px) translateY(${translateY}px)`
 
-                    // console.log({
-                    //     screenX: screenPosition.x,
-                    //     screenY: screenPosition.y,
-                    //     translateX,
-                    //     translateY,
-                    //     sizes: this.experience.sizes,
-                    // });
                     const targetX = -screenPosition.x * this.experience.sizes.width * 0.5;
                     const targetY = screenPosition.y * this.experience.sizes.height * 0.5;
 
@@ -437,35 +351,13 @@ export default class Scene1 {
 
                     // // Appliquez les positions lissées
                     point.element.style.transform = `translateX(${point.prevTranslateX}px) translateY(${point.prevTranslateY}px)`;
-                    // point.element.style.transform = `translateX(${point.targetX}px) translateY(${point.targetY}px)`;
 
                     
                 }
 
+            
             }
-        }
 
-        if (this.TikTokLogo){
-            this.TikTokLogo.model.position.set(-1,-4.5,-15);
-        }
-
-        if(this.Heart){
-            this.heartGroup.children.forEach((child) => {
-                child.position.y -= 0.001 + Math.random() * 0.002;
-                // child.position.y.set(child.position.y - (0.01 + Math.random() * 0.2) )
-                if (child.position.y < -3) {
-                    child.position.y = 2 + Math.random() * 5;
-                    child.position.x = (Math.random() - 0.5) * 10;
-                    child.position.z = (Math.random() - 0.5) * 10;
-                }
-                // console.log("parcourt du groupe");
-            });
-        }
-
-        // this.torusKnot.rotation.x = -elapsedTime * 0.1;
-        // this.torusKnot.rotation.y = elapsedTime * 0.2;
-
-        // Mise à jour des contrôles
         this.controls.update();
   }
 
@@ -528,22 +420,22 @@ export default class Scene1 {
             this.sunLight = null;
         }
 
-        this.scene.remove(this.Iphone);
-        this.scene.remove(this.heartGroup);
-        this.scene.remove(this.PhoneScreen);
-        this.scene.remove(this.TikTokLogo);
-        this.scene.remove(this.Heart);
-        this.scene.remove(this.text);
+        // this.scene.remove(this.Iphone);
+        // this.scene.remove(this.heartGroup);
+        // this.scene.remove(this.PhoneScreen);
+        // this.scene.remove(this.TikTokLogo);
+        // this.scene.remove(this.Heart);
+        // this.scene.remove(this.text);
 
-        this.Iphone = null;
-        this.heartGroup = null;
-        this.PhoneScreen = null;
-        this.TikTokLogo = null;
-        this.Heart = null;
-        this.text=null;
-        this.material = null;
-        this.testMaterial = null;
-        console.log(this.testMaterial);
+        // this.Iphone = null;
+        // this.heartGroup = null;
+        // this.PhoneScreen = null;
+        // this.TikTokLogo = null;
+        // this.Heart = null;
+        // this.text=null;
+        // this.material = null;
+        // this.testMaterial = null;
+        // console.log(this.testMaterial);
 
 
         this.hidePoints();

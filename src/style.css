@@ -94,6 +94,7 @@ body
     align-items: center;
     justify-content: center;
     z-index: 10;
+
   }
   #popup > .popup-content{
     margin:auto;
@@ -101,18 +102,21 @@ body
     justify-content: center;
     font-family: "Merriweather", serif;
     text-align: center;
+    filter: blur(0.5px) brightness(2.2) contrast(1.5) drop-shadow(0 0 10px rgba(255, 255, 255, 0.5)) grayscale(0.3) hue-rotate(45deg) invert(0.2) saturate(1.8) sepia(0.5);
+
   }
 
   #popup .welcome{
     width: 300px;
     font-weight: 300;
     line-height: 20px;
-    font-style: italic;
+    font-style: italic;   
   }
 
   #popup .instruction{
-    font-size: 10px;
+    font-size: 12px;
     padding-top:30px;
+    font-weight: 500;
   }
 
   .popup-footer {
@@ -124,15 +128,7 @@ body
     justify-content: space-between;
     width: calc(100% - 40px); 
     font-weight: 300;
-  }
-
-  #playVideo{
-    padding: 10px 20px;
-    font-size: 13px;
-    cursor: pointer;
-    font-family: "Merriweather", serif;
-    font-weight: 900;
-    font-style: italic;
+    filter: blur(0.5px) brightness(2.2) contrast(1.5) drop-shadow(0 0 10px rgba(255, 255, 255, 0.5)) grayscale(0.3) hue-rotate(45deg) invert(0.2) saturate(1.8) sepia(0.5);
   }
 
   #switch-scene-btn {
@@ -238,6 +234,20 @@ body
     background: #00000077;
   }
 
+  .point .description.s6
+  {
+    right:40px;
+    top:0px;
+  }
+
+  .point .text.annual-change{
+    font-size: 9px;
+    top:30px;
+    z-index: 2;
+    transform: translateX(-76px);
+    padding: 5px;
+  }
+
 
 
 .point:hover .text,
@@ -341,6 +351,7 @@ body
     var(--g) 20px 20px;
   background-size: 50% 50%;
   animation: l15 1s infinite;
+  filter: blur(0.5px) brightness(2.2) contrast(1.5) drop-shadow(0 0 10px rgba(255, 255, 255, 0.5)) grayscale(0.3) hue-rotate(45deg) invert(0.2) saturate(1.8) sepia(0.5);
 }
 @keyframes l15 {
     90%,100%  {background-position: -30px 30px,-20px 40px,-10px 50px} 

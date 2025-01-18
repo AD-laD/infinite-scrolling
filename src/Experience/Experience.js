@@ -13,6 +13,8 @@ import sources from './sources.js'
 import Scene1 from '../scenes/scene1.js';
 import Scene3 from '../scenes/scene3.js';
 import Scene4 from '../scenes/scene4.js';
+import Scene6 from '../scenes/scene6.js';
+
 
 
 let instance = null
@@ -50,7 +52,8 @@ export default class Experience
         this.scenes = [
             new Scene1(),
             new Scene3(), 
-            new Scene4()
+            new Scene4(),
+            new Scene6()
         ];  
         this.scene = this.scenes[this.currentSceneIndex];
         this.scene.activate();

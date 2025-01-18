@@ -15,9 +15,7 @@ export default class Scene4 {
       0.1,
       1000
     );
-    this.camera.position.set(0, 1, 3);
-    this.controls = new OrbitControls(this.camera, document.querySelector('canvas'));
-    this.controls.enableDamping = true; // Active le lissage des contrôles
+    
     this.active = false;
 
    
@@ -27,6 +25,9 @@ export default class Scene4 {
   activate() {
     this.active = true;
     console.log("Scene2 activated");
+    this.camera.position.set(2.8, 1.5, 6);
+    this.controls = new OrbitControls(this.camera, document.querySelector('canvas'));
+    this.controls.enableDamping = true; 
     this.molecule = new THREE.Group();
 
     this.moleculeGroup = new THREE.Group();
@@ -297,16 +298,10 @@ export default class Scene4 {
 
   update() {
     if (!this.active) return;
-    // this.sphere.rotation.y += 0.01;
 
-    // Mise à jour des molécules
     const time = performance.now() * 0.001;
     const radius = 10; 
     this.updateMolecules(time);
-
-    // this.light.position.x = radius * Math.cos(time);
-    // this.light.position.z = radius * Math.sin(time);
-    // this.light2.intensity = Math.cos(time)*100+100;
 
     this.atom1.position.y = Math.sin(time) * 0.05;
     this.atom2.position.y = Math.cos(time) * 0.05;
@@ -377,7 +372,8 @@ export default class Scene4 {
         }
     });
     if (this.controls) {
-        this.controls.dispose();
+      this.controls.dispose();
+      this.controls=null;
     }
     while (this.scene.children.length > 0) {
         const child = this.scene.children[0];
