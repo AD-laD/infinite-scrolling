@@ -51,7 +51,7 @@ export default class Renderer
 
     addEffects(){
         const effect1 = new ShaderPass(DotScreenShader);
-        effect1.uniforms['scale'].value = 0.02;
+        effect1.uniforms['scale'].value = 20;
         this.instance.composer.addPass(effect1);
 
         const effect2 = new ShaderPass(RGBShiftShader);

@@ -46,7 +46,6 @@ export default class Scene1 {
 
         
         this.raycaster = new THREE.Raycaster();
-        this.mouse = new THREE.Vector2();
 
         this.ptx=0;
         this.pty=0;
@@ -342,8 +341,7 @@ export default class Scene1 {
         this.time = this.experience.time
         // console.log("Scene3 activated");
         // Création des objets de la scène
-
-
+        this.mouse = new THREE.Vector2();
         // Écouteurs d'événements
         this.setupEventListeners();
         this.switchButton = document.getElementById('switch-scene-btn');

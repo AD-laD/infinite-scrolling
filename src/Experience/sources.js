@@ -51,6 +51,11 @@ export default [
         name: 'brain',
         type: 'gltfModel',
         path : 'models/brain/sample(1).gltf'
+    },
+    {
+        name: 'slot',
+        type: 'gltfModel',
+        path : 'models/coin/untitled.gltf'
     }
 
 ]
