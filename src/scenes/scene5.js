@@ -198,8 +198,8 @@ export default class Scene5 {
       this.slotMachine.castShadow = true;
     this.barGroup.position.set(0.27,-0.2,-0.04)
     this.barGroup.rotateX(Math.PI/6);
-    window.addEventListener("click", this.onClick.bind(this));
-
+    this.onClick = this.onClick.bind(this);
+    window.addEventListener('click', this.onClick);
     const planeGeometry = new THREE.PlaneGeometry(10,10,2,2);
     const material = new THREE.MeshStandardMaterial({ color: 0x555555, side: THREE.DoubleSide });
     const plane = new THREE.Mesh(planeGeometry, material);
@@ -331,6 +331,7 @@ export default class Scene5 {
       this.switchButton.removeEventListener('click', this.onSwitchSceneClick);
       this.onSwitchSceneClick = null;
     }
+    window.removeEventListener('click', this.onClick);
   
     this.scene.traverse((child) => {
       if (child instanceof THREE.Mesh || child instanceof THREE.Points || child instanceof THREE.Line) {

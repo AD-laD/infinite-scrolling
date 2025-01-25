@@ -317,7 +317,6 @@ export default class Scene1 {
                     
                     const scale = Math.random()*0.005;
         
-                    // Ajouter le cœur cloné à la scène
                     this.heartGroup = this.Heart.addToScene(this.scene, this.material, position, scale, this.heartGroup);
                 }
         }

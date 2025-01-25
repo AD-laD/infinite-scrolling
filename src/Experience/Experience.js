@@ -15,6 +15,11 @@ import Scene3 from '../scenes/scene3.js';
 import Scene4 from '../scenes/scene4.js';
 import Scene5 from '../scenes/scene5.js';
 import Scene6 from '../scenes/scene6.js';
+import Scene7 from '../scenes/scene7.js';
+import Scene9 from '../scenes/scene9.js';
+import Scene11 from '../scenes/scene11.js';
+
+
 
 
 
@@ -52,10 +57,13 @@ export default class Experience
         this.currentSceneIndex = 0;
         this.scenes = [
             new Scene1(),
-            new Scene3(), 
-            new Scene4(),
-            new Scene5(),
-            new Scene6()
+            // new Scene3(), 
+            // new Scene4(),
+            // new Scene5(),
+            // new Scene6(),
+            new Scene7(),
+            new Scene9(),
+            new Scene11()
         ];  
         this.scene = this.scenes[this.currentSceneIndex];
         this.scene.activate();

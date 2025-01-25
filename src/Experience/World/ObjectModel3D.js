@@ -18,24 +18,21 @@ export default class ObjectModel3D
         }
 
         // Récupérer la ressource selon le nom
-        // this.resource = this.resources['iphone'];
-        // this.resource = this.resources.sources.find(resource => resource.name === 'foxModel');
+
         this.resource = this.resources.items[modelName];
-        console.log(this.resources.sources)
-        console.log("Available resource keys:", Object.keys(this.resources))
+        // console.log(this.resources.sources)
+        // console.log("Available resource keys:", Object.keys(this.resources))
 
         if (this.resource) {
             this.setModel(scale)
-            this.setAnimation()
         } 
-        // else {
-        //     console.error(`Resource ${modelName} not found!`)
-        // }
+        else {
+            console.error(`Resource ${modelName} not found!`)
+        }
     }
 
     setModel(scale)
     {
-        // Charger le modèle 3D
         this.model = this.resource.scene
         this.model.scale.set(scale.x, scale.y, scale.z)
         this.scene.add(this.model)
@@ -67,9 +64,4 @@ export default class ObjectModel3D
         return group;
     }
 
-
-    setAnimation()
-    {
-        // Implémenter l'animation si nécessaire
-    }
 }

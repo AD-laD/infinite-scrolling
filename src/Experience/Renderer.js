@@ -65,7 +65,6 @@ export default class Renderer
             0.02  // Seuil
         );
         this.instance.composer.addPass(bloomPass);
-
     }
 
     resize()

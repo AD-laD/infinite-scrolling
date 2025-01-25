@@ -4,6 +4,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import shadingVertexShader from '../shaders/shading/vertex.glsl'
 import shadingFragmentShader from '../shaders/shading/fragment.glsl'
 
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
+
 
 export default class Scene4 {
   constructor() {
@@ -31,12 +34,14 @@ export default class Scene4 {
     this.molecule = new THREE.Group();
 
     this.moleculeGroup = new THREE.Group();
+    this.fontLoader = new FontLoader()
     this.createSceneObjects();
     this.setupEventListeners();
             
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
     this.setLight();
+    
     this.switchButton = document.getElementById('switch-scene-btn');
     if (this.switchButton) {
       this.onSwitchSceneClick = () => window.experience.switchScene();
@@ -74,6 +79,42 @@ export default class Scene4 {
     this.light2.intensity= 4;
     this.scene.add(this.light2);
 
+  }
+
+  load3DText(content, size, position, rotateZ){
+    this.fontLoader.load(
+        '/fonts/helvetiker_regular.typeface.json',
+        (font) =>
+        {
+            this.textGeometry = new TextGeometry(
+                content,
+                {
+                    font: font,
+                    size: size,
+                    depth: 0.01,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 0.01,
+                    bevelSize: 0.005,
+                    bevelOffset: 0,
+                    bevelSegments: 5
+                }
+            )
+        
+            
+            this.text = new THREE.Mesh(this.textGeometry, this.textMaterial)
+            this.textGeometry.computeBoundingBox()
+            this.textGeometry.translate(
+                - (this.textGeometry.boundingBox.max.x-0.02) * 0.5,
+                - (this.textGeometry.boundingBox.max.y-0.02) + 1.5,
+                - (this.textGeometry.boundingBox.max.z-0.02) * 0.5
+            )
+            this.textGeometry.center()
+            this.scene.add(this.text)
+            this.text.position.set(position.x,position.y,position.z)
+            if (rotateZ) this.text.rotateZ(-Math.PI/2);
+            
+        });
   }
 
   createSceneObjects() {
@@ -127,6 +168,43 @@ export default class Scene4 {
 
     this.atom21 = this.createAtom(new THREE.Vector3(2.6, 0.4, -0.1),0.1);
     this.atom22 = this.createAtom(new THREE.Vector3(2.6, -0.2, -0.1),0.1);
+
+    this.load3DText('D o p a m i n', 0.3, new THREE.Vector3(0.2, 1.7, 0));
+    this.load3DText('C a', 0.1, new THREE.Vector3(-0.6, 0.3, 0));
+    this.load3DText('C a', 0.1, new THREE.Vector3(0.6, 0.3, 0));
+    this.load3DText('C a', 0.1, new THREE.Vector3(0.2, 0.6, 0));
+    this.load3DText('C a', 0.1, new THREE.Vector3(0.6, -1, 0));
+    this.load3DText('C a', 0.1, new THREE.Vector3(-0.6, -1, 0));
+    this.load3DText('C a', 0.1, new THREE.Vector3(0, -0.7, 0));
+
+    this.load3DText('H', 0.1, new THREE.Vector3(0, 1.1, 0));
+
+    this.load3DText('O', 0.1, new THREE.Vector3(-1.4, 0.6, 0));
+    this.load3DText('H', 0.1, new THREE.Vector3(-1.1, 1.1, 0));
+
+    this.load3DText('O', 0.1, new THREE.Vector3(-1.4, -0.8, 0));
+    this.load3DText('H', 0.1, new THREE.Vector3(-2, -0.4, 0));
+
+    this.load3DText('H', 0.1, new THREE.Vector3(0, -1.8, 0));
+
+    this.load3DText('H', 0.1, new THREE.Vector3(1.1, -1.1, 0));
+
+    this.load3DText('C a', 0.1, new THREE.Vector3(1.3, 0.5, 0));
+    this.load3DText('C a', 0.1, new THREE.Vector3(1.8, 0.4, -0.5));
+
+    this.load3DText('Na', 0.1, new THREE.Vector3(2.5, 0.4, -0.5));
+
+    this.load3DText('H', 0.1, new THREE.Vector3(1.5, 0.65, 0.4));
+    this.load3DText('H', 0.1, new THREE.Vector3(1.5, -0.55, 0.4));
+
+    this.load3DText('H', 0.1, new THREE.Vector3(1.8, 0.7, -0.8));
+    this.load3DText('H', 0.1, new THREE.Vector3(1.8, -0.1, -0.8));
+
+    this.load3DText('H', 0.1, new THREE.Vector3(2.6, 0.6, -0.1));
+    this.load3DText('H', 0.1, new THREE.Vector3(2.6, 0, -0.1));
+
+
+
 
 
 

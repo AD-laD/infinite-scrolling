@@ -171,7 +171,6 @@ export default class Scene6 {
     }
 
     load3DText(content, size, position, rotateZ){
-        this.fontLoader = new FontLoader()
         this.fontLoader.load(
             '/fonts/helvetiker_regular.typeface.json',
             (font) =>
@@ -285,6 +284,7 @@ export default class Scene6 {
 
         this.setLight();
         // this.setupDebug();
+        this.fontLoader = new FontLoader()
         
         this.createSceneObjects();
         this.loadSounds();
