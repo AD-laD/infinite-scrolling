@@ -59,7 +59,7 @@ export default class Scene7 {
     this.controls.enableDamping = true;
     this.fontLoader = new FontLoader()
     this.createSceneObjects();
-    // this.loadSounds();
+    this.loadSounds();
     this.switchButton = document.getElementById('switch-scene-btn');
     if (this.switchButton) {
       this.onSwitchSceneClick = () => window.experience.switchScene();
@@ -74,11 +74,16 @@ export default class Scene7 {
       src: 'sound/hover.wav',
       volume: 0.8
     });
-    this.points.forEach((point) => {
-      point.element.addEventListener('mouseenter', () => {
-          hoverSound.play();
-      });
-    });
+    // this.points.forEach((point) => {
+    //   point.element.addEventListener('mouseenter', () => {
+    //       hoverSound.play();
+    //   });
+    // });
+    this.voiceOver = new Sound({
+                src: 'sound/scene7.mp3',
+                volume: 1
+            });
+    this.voiceOver.play();
   }
 
   load3DText(content, size, position, rotateX){
@@ -221,7 +226,7 @@ export default class Scene7 {
         this.switchButton.removeEventListener('click', this.onSwitchSceneClick);
         this.onSwitchSceneClick = null;
         }
-    
+        this.voiceOver.stop();
         this.scene.traverse((child) => {
         if (child instanceof THREE.Mesh || child instanceof THREE.Points || child instanceof THREE.Line) {
             if (child.geometry) {

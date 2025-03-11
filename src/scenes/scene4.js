@@ -6,6 +6,8 @@ import shadingFragmentShader from '../shaders/shading/fragment.glsl'
 
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
+import Sound from '../Experience/World/Sound.js'
+
 
 
 export default class Scene4 {
@@ -36,6 +38,7 @@ export default class Scene4 {
     this.moleculeGroup = new THREE.Group();
     this.fontLoader = new FontLoader()
     this.createSceneObjects();
+    this.loadSounds();
     this.setupEventListeners();
             
     this.raycaster = new THREE.Raycaster();
@@ -79,6 +82,24 @@ export default class Scene4 {
     this.light2.intensity= 4;
     this.scene.add(this.light2);
 
+  }
+
+  loadSounds(){
+      const hoverSound = new Sound({
+        src: 'sound/hover.wav',
+        volume: 0.8
+      });
+      // this.points.forEach((point) => {
+      //   point.element.addEventListener('mouseenter', () => {
+      //       hoverSound.play();
+      //   });
+      // });
+  
+      this.voiceOver = new Sound({
+                  src: 'sound/scene4.mp3',
+                  volume: 1
+              });
+      this.voiceOver.play();
   }
 
   load3DText(content, size, position, rotateZ){
@@ -436,6 +457,7 @@ export default class Scene4 {
       this.switchButton.removeEventListener('click', this.onSwitchSceneClick);
     }
     window.removeEventListener('click', this.onClick);
+    this.voiceOver.stop();
 
        this.scene.traverse((child) => {
         if (child instanceof THREE.Mesh) {

@@ -54,7 +54,7 @@ export default class Scene3 {
     this.camera.position.set(-2, 0, 1);
     this.camera.lookAt(0,0,0)
     this.controls = new OrbitControls(this.camera, document.querySelector('canvas'));
-    this.controls.enableDamping = true; // Active le lissage des contrôles
+    this.controls.enableDamping = true; 
     
     this.createSceneObjects();
     this.loadSounds();
@@ -114,6 +114,18 @@ export default class Scene3 {
           hoverSound.play();
       });
     });
+
+    this.voiceOver = new Sound({
+        src: 'sound/scene3.mp3',
+        volume: 1
+    });
+    this.voiceOver.play();
+    // const music = new Sound({
+    //   src: 'sound/music.mp3',
+    //   volume: 0.03
+    // });
+    // music.play();
+    // // music.loop = true;
   }
 
   videoTexture(){
@@ -274,6 +286,8 @@ export default class Scene3 {
       this.switchButton.removeEventListener('click', this.onSwitchSceneClick);
       this.onSwitchSceneClick = null;
     }
+
+    this.voiceOver.stop();
   
     this.scene.traverse((child) => {
       if (child instanceof THREE.Mesh || child instanceof THREE.Points || child instanceof THREE.Line) {

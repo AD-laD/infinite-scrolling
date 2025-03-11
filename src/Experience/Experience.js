@@ -18,7 +18,9 @@ import Scene6 from '../scenes/scene6.js';
 import Scene7 from '../scenes/scene7.js';
 import Scene9 from '../scenes/scene9.js';
 import Scene11 from '../scenes/scene11.js';
+import Scene12 from '../scenes/scene12.js';
 
+import Sound from '../Experience/World/Sound.js'
 
 
 
@@ -57,20 +59,24 @@ export default class Experience
         this.currentSceneIndex = 0;
         this.scenes = [
             new Scene1(),
-            // new Scene3(), 
-            // new Scene4(),
-            // new Scene5(),
-            // new Scene6(),
+            new Scene3(), 
+            new Scene4(),
+            new Scene5(),
+            new Scene6(),
             new Scene7(),
             new Scene9(),
-            new Scene11()
+            new Scene11(),
+            new Scene12()
         ];  
         this.scene = this.scenes[this.currentSceneIndex];
         this.scene.activate();
         this.camera = this.getActiveCamera()
         this.renderer = new Renderer()
+        this.music = new Sound({
+            src: 'sound/music.mp3',
+            volume: 0.03
+        });
 
-        
         console.log(this.scene);
 
         // Resize event
@@ -88,13 +94,15 @@ export default class Experience
 
     resize()
     {
-        // const activeCamera = this.getActiveCamera();
-        // if (activeCamera) {
-        //     activeCamera.resize();
-        // }
-        // this.sizes.resize()
         this.scene.resize()
         this.renderer.resize()
+    }
+
+    setMusic(){
+        this.music.play();
+        // this.music.loop = true;
+        this.music.setLoop(10);
+        this.isMusicPlaying = true;
     }
 
 
@@ -108,6 +116,11 @@ export default class Experience
         // this.prevScene.destroy();
         console.log(this.currentSceneIndex);
         this.resize()
+
+        if (this.currentSceneIndex > 0 && !this.isMusicPlaying){
+            this.setMusic();
+        }
+
     }
     
 
@@ -127,6 +140,7 @@ export default class Experience
     {
         this.scene.update()
         this.renderer.update()
+
     }
 
     

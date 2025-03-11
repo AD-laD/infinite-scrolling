@@ -147,6 +147,12 @@ export default class Scene6 {
                 hoverSound.play();
             });
         });
+
+        this.voiceOver = new Sound({
+                    src: 'sound/scene6.mp3',
+                    volume: 1
+                });
+        this.voiceOver.play();
     }
 
     createBars(){
@@ -370,6 +376,8 @@ export default class Scene6 {
         if (this.onSceneClick){
             document.removeEventListener('click',this.onSceneClick)
         }
+
+        this.voiceOver.stop();
 
         this.scene.traverse((child) => {
             if (child instanceof THREE.Mesh) {

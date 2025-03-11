@@ -317,6 +317,14 @@ body
 }
 
 
+.s12 > .point .label{
+  opacity:0;
+}
+
+.s12> .point.visible .label{
+  opacity: 0.1 !important;
+}
+
 
 @keyframes float {
   0%, 100% {

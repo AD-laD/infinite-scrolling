@@ -42,6 +42,46 @@ export default [
         type: 'texture',
         path: 'textures/icon/share.png'
     },
+    {
+        name: 'age',
+        type: 'texture',
+        path: 'textures/icon/13.png'
+    },
+    {
+        name: 'access',
+        type: 'texture',
+        path: 'textures/icon/accescontrol.png'
+    },
+    {
+        name: 'data',
+        type: 'texture',
+        path: 'textures/icon/dataprotection.png'
+    },
+    {
+        name: 'footprint',
+        type: 'texture',
+        path: 'textures/icon/footprint.png'
+    },
+    {
+        name: 'settings',
+        type: 'texture',
+        path: 'textures/icon/settings.png'
+    },
+    {
+        name: 'balance',
+        type: 'texture',
+        path: 'textures/icon/balance.png'
+    },
+    {
+        name: 'critical',
+        type: 'texture',
+        path: 'textures/icon/critical-thinking.png'
+    },
+    {
+        name: 'screentime',
+        type: 'texture',
+        path: 'textures/icon/screentime.png'
+    },
     // {
     //     name: 'foxModel',
     //     type: 'gltfModel',
@@ -101,6 +141,11 @@ export default [
         name: 'sleep',
         type: 'gltfModel',
         path : 'models/sleep/sleep.gltf'
+    },
+    {
+        name: 'smiley',
+        type: 'gltfModel',
+        path : 'models/smile/smiley.gltf'
     }
 
 

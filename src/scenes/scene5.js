@@ -119,6 +119,18 @@ export default class Scene5 {
           hoverSound.play();
       });
     });
+
+    this.voiceOver = new Sound({
+                src: 'sound/scene5.mp3',
+                volume: 1
+            });
+    this.voiceOver.play();
+
+    this.slotSound = 
+    new Sound({
+      src: 'sound/slot2.mp3',
+      volume: 0.2
+    });
   }
 
   createSphere(radius, widthSegments, heightSegments, position) {
@@ -218,6 +230,7 @@ export default class Scene5 {
     const intersects = this.raycaster.intersectObject(this.barGroup);
     if (intersects.length > 0) {
       this.rotateBar();
+      this.slotSound.play();
     }
    
   }
@@ -332,7 +345,8 @@ export default class Scene5 {
       this.onSwitchSceneClick = null;
     }
     window.removeEventListener('click', this.onClick);
-  
+    this.voiceOver.stop();
+
     this.scene.traverse((child) => {
       if (child instanceof THREE.Mesh || child instanceof THREE.Points || child instanceof THREE.Line) {
         if (child.geometry) {
